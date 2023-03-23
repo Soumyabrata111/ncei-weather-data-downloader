@@ -1,6 +1,9 @@
 # ncei-weather-data-downloader
 A Python script that downloads global hourly weather data from the NOAA National Centers for Environmental Information (NCEI) website. 
 
+## Adding Indian Stations Branch
+This repository has a new branch called indian-stations, which focuses only on downloading weather data for Indian stations. This branch contains a new Python script called NCEI_NOAA_Indian_Stations_csv_downloader.py, which can be used to download hourly weather data from the NCEI website for Indian stations only.
+
 ## Dependencies
 This script requires the dependencies, which are listed in the __requirements.txt__ 
 
@@ -14,3 +17,4 @@ __python ncei-weather-data-downloader.py__
 
 ## License
 This repository is licensed under the MIT License. This means that others are free to use, distribute, and modify this work as long as they include a copy of the license and attribute the original creators
+
