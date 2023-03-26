@@ -4,6 +4,10 @@ A Python script that downloads global hourly weather data from the NOAA National
 ## Adding Indian Stations Branch
 This repository has a new branch called indian-stations, which focuses only on downloading weather data for Indian stations. This branch contains a new Python script called NCEI_NOAA_Indian_Stations_csv_downloader.py, which can be used to download hourly weather data from the NCEI website for Indian stations only.
 
+## Merging Indian Stations CSV Files
+This repository now contains a new Python script called `csv_file_merger_v1.py`, which can be used to merge CSV files downloaded using the `NCEI_NOAA_Indian_Stations_csv_downloader.py` script. This script merges CSV files for each station and stores them in separate CSV files with the name of the station as the filename. To use this script, simply run it using Python: 'python csv_file_merger_v1.py'
+
+
 ## Dependencies
 This script requires the dependencies, which are listed in the __requirements.txt__ 
 
