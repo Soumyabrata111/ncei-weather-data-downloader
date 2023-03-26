@@ -1,45 +1,39 @@
+# Merge all the CSV files in folders 2012 to 2023 into one CSV file assuming that all the folders in the current directory
+
 import os
+import glob
 import pandas as pd
 
-# Set the current working directory
-directory = os.getcwd()
+# Get the current working directory
+cwd = os.getcwd()
 
-# Define the names of the year folders
-year_folders = [str(year) for year in range(2012, 2024)]
+# Get all the folders in the current directory
+folders = glob.glob(cwd + '/*')
 
-# Create an empty DataFrame to store the merged data
-merged_data = pd.DataFrame()
+# Create a list to store the dataframes
+df_list = []
 
-# Loop through each year folder
-for year in year_folders:
+# Loop through all the folders
+for folder in folders:
+    # Get all the CSV files in the folder
+    csv_files = glob.glob(folder + '/*.csv')
+    # Loop through all the CSV files
+    for csv_file in csv_files:
+        # Read the CSV file into a dataframe
+        df = pd.read_csv(csv_file, low_memory=False)
+        # Append the dataframe to the list
+        df_list.append(df)
 
-    # Construct the path to the year folder
-    year_path = os.path.join(directory, year)
+# Concatenate all the dataframes in the list
+df = pd.concat(df_list)
 
-    # Loop through each CSV file in the year folder
-    for csv_file in os.listdir(year_path):
-        if csv_file.endswith(".csv"):
+# Write the dataframe to a CSV file
+df.to_csv('merged.csv', index=False)
 
-            # Construct the path to the CSV file
-            csv_path = os.path.join(year_path, csv_file)
+# Group the merged data on STATION column
+df_grouped = df.groupby('STATION')
 
-            # Read the data from the CSV file into a DataFrame
-            data = pd.read_csv(csv_path, low_memory=False)
+# Save each group as a CSV file
+for name, group in df_grouped:
+    group.to_csv(str(name) + '.csv', index=False)
 
-            # Append the data to the merged_data DataFrame
-            merged_data = pd.concat([merged_data, data])
-
-            # Print a message to indicate that the CSV file has been merged
-            print(f"CSV file {csv_file} for year {year} has been merged.")
-
-# Convert all columns to consistent data types
-for column in merged_data.columns:
-    merged_data[column] = pd.to_numeric(merged_data[column], errors='coerce')
-
-# Group the merged data by station name
-grouped_data = merged_data.groupby('STATION')
-
-# Loop through each group and write it to a separate CSV file
-for group_name, group_data in grouped_data:
-    group_data.to_csv(os.path.join(directory, f"{group_name}.csv"), index=False)
-    print(f"{group_name}.csv file has been saved.")
