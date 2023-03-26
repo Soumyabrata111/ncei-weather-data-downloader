@@ -1,6 +1,9 @@
 # ncei-weather-data-downloader
 A Python script that downloads global hourly weather data from the NOAA National Centers for Environmental Information (NCEI) website. 
 
+## Merging Indian Stations CSV Files
+This repository now contains a new Python script called `csv_file_merger_v1.py`, which can be used to merge CSV files downloaded using the `NCEI_NOAA_Indian_Stations_csv_downloader.py` script. This script merges CSV files for each station and stores them in separate CSV files with the name of the station as the filename. To use this script, simply run it using Python: 'python csv_file_merger_v1.py'
+
 ## Dependencies
 This script requires the dependencies, which are listed in the __requirements.txt__ 
 
