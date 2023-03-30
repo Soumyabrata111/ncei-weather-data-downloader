@@ -5,7 +5,7 @@ A Python script that downloads global hourly weather data from the NOAA National
 This repository now contains a new Python script called `csv_file_merger_v1.py`, which can be used to merge CSV files downloaded using the `NCEI_NOAA_Indian_Stations_csv_downloader.py` script. This script merges CSV files for each station and stores them in separate CSV files with the name of the station as the filename. To use this script, simply run it using Python: 'python csv_file_merger_v1.py'
 
 ## Producing CSV file for hourly wind speed
-Now using the python file 'hourly_wind_data.py', hourly wind speed data for any particular station may be filtered out from the downloaded CSV files.
+Now using the Python script called `hourly_wind_data.py`, hourly wind speed data for all the downloaded stations may be filtered out from the downloaded CSV files.
 
 ## Dependencies
 This script requires the dependencies, which are listed in the __requirements.txt__ 
