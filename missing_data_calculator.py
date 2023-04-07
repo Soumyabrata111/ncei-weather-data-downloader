@@ -2,9 +2,9 @@ import pandas as pd
 import numpy as np
 
 # Read the csv file
-# df = pd.read_csv('Modified_CHHATRAPATI SHIVAJI INTERNATIONAL, IN.csv')
+df = pd.read_csv('Modified_CHHATRAPATI SHIVAJI INTERNATIONAL, IN.csv')
 # df = pd.read_csv('Modified_CHENNAI INTERNATIONAL, IN.csv')
-df = pd.read_csv('Modified_HYDERABAD INTERNATIONAL AIRPORT, IN.csv')
+# df = pd.read_csv('Modified_HYDERABAD INTERNATIONAL AIRPORT, IN.csv')
 
 # Create an empty dataframe with columns [Date Year	Month	Day	Hour	Minutes	Seconds]
 df1 = pd.DataFrame(columns=['Year', 'Month', 'Day', 'Hour', 'Minutes', 'Seconds'])
@@ -30,3 +30,6 @@ angle_missing_pct = merged_df['Angle'].isna().mean() * 100
 
 print("Percentage of missing values in Wind_Speed column: {:.2f}%".format(wind_speed_missing_pct))
 print("Percentage of missing values in Angle column: {:.2f}%".format(angle_missing_pct))
+
+# Save the merged dataframe to a csv file
+merged_df.to_csv('Merged_Modified_CHHATRAPATI SHIVAJI INTERNATIONAL, IN.csv', index=False)
