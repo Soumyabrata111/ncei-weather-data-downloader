@@ -7,6 +7,9 @@ This repository now contains a new Python script called `csv_file_merger_v1.py`,
 ## Producing CSV file for hourly wind speed
 Now using the Python script called `hourly_wind_data.py`, hourly wind speed data for all the downloaded stations may be filtered out from the downloaded CSV files.
 
+## Calculate percentage of missing data
+Now using the Python script called `missing_data_calculator.py`, percentage of missing data for individual stations can be calculated
+
 ## Dependencies
 This script requires the dependencies, which are listed in the __requirements.txt__ 
 
