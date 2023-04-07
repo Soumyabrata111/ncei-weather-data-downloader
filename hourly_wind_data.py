@@ -29,7 +29,7 @@ def process_csv(file):
     print(f'Saved modified data to {output_file}')
 
 # Folder containing the CSV files
-folder_path = 'D:\\ImportantDocuments\\PhD_MU\\New_Effort\\git_repo_files'
+folder_path = 'pat_to_folder_containing_csv_files'
 
 # Iterate over all CSV files in the folder
 for file_name in os.listdir(folder_path):
