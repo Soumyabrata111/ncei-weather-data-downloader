@@ -1,8 +1,14 @@
 import pandas as pd
+import numpy as np
 import tensorflow as tf
 from tensorflow.keras import layers
 import tensorflow.keras.backend as K
+from scipy.stats import ks_2samp
+from sklearn.metrics import mean_absolute_error, mean_squared_error
+from sklearn.preprocessing import MinMaxScaler
+
 K.set_epsilon(1e-8)
+
 # Read and preprocess data
 df = pd.read_csv('CHHATRAPATI SHIVAJI INTERNATIONAL, IN.csv', usecols=['DATE','REPORT_TYPE', 'WND'])
 df[['Angle', 'Angle_Measurement_Quality', 'Wind_Obs_Character', 'Wind_Speed', 'Wind_Speed_Quality']] = df['WND'].str.split(",", expand=True)
@@ -107,30 +113,35 @@ def train_step(generator_model, discriminator_model, real_data):
 
     return disc_loss, gen_loss, missing_indices
 
+scaler = MinMaxScaler()
+
 # Train the GAN
 generator_model = make_generator_model()
 discriminator_model = make_discriminator_model()
 
 available_data = merged_df[['Wind_Speed', 'Angle']].values
-
 missing_indices = np.isnan(available_data).any(axis=1)
+
+scaler.fit(available_data[~missing_indices])
+available_data = scaler.transform(available_data)
+
+real_data = available_data[~missing_indices]
+fake_data = available_data[missing_indices]
 
 # for epoch in range(1000):
 for epoch in range(201):
     for i in range(100):
-        real_data = available_data[np.random.choice(len(available_data), size=128, replace=False)]
-        disc_loss, gen_loss, _ = train_step(generator_model, discriminator_model, real_data)
-
+        real_data_batch = real_data[np.random.choice(len(real_data), size=128, replace=False)]
+        disc_loss, gen_loss, _ = train_step(generator_model, discriminator_model, real_data_batch)
 
     if epoch % 100 == 0:
         print(f'Epoch {epoch}, Disc loss: {disc_loss.numpy()}, Gen loss: {gen_loss.numpy()}')
 
-
 # Generate predictions for the missing data
-missing_count = np.sum(missing_indices)
-noise = tf.random.normal([missing_count, 100])
+noise = tf.random.normal([len(fake_data), 100])
 generated_data = generator_model(noise).numpy()
 available_data[missing_indices] = generated_data
+available_data = scaler.inverse_transform(available_data)
 
 # Update the merged_df DataFrame
 merged_df.loc[:, 'Wind_Speed'] = available_data[:, 0]
@@ -138,6 +149,56 @@ merged_df.loc[:, 'Angle'] = available_data[:, 1]
 
 # Define datetime for saving the updated DataFrame
 from datetime import datetime
+
+# Calculate the evaluation metrics
+real_data = df[['Wind_Speed', 'Angle']].values
+generated_data = merged_df.loc[missing_indices, ['Wind_Speed', 'Angle']].values
+
+# Statistical measures
+print("\nStatistical Measures:")
+real_mean = np.nanmean(real_data, axis=0)
+generated_mean = np.mean(generated_data, axis=0)
+print(f"Mean (Real): {real_mean}")
+print(f"Mean (Generated): {generated_mean}")
+
+real_std = np.nanstd(real_data, axis=0)
+generated_std = np.std(generated_data, axis=0)
+print(f"Standard Deviation (Real): {real_std}")
+print(f"Standard Deviation (Generated): {generated_std}")
+
+# Distribution similarity
+print("\nDistribution Similarity:")
+ks_stat, ks_pvalue = ks_2samp(real_data[:, 0], generated_data[:, 0])
+print(f"Wind_Speed Kolmogorov-Smirnov Test: KS Statistic = {ks_stat}, P-value = {ks_pvalue}")
+
+ks_stat, ks_pvalue = ks_2samp(real_data[:, 1], generated_data[:, 1])
+print(f"Angle Kolmogorov-Smirnov Test: KS Statistic = {ks_stat}, P-value = {ks_pvalue}")
+
+# Cross-correlation
+print("\nCross-correlation:")
+cross_corr_wind_speed = np.correlate(real_data[:, 0], generated_data[:, 0], mode='valid')[0]
+cross_corr_angle = np.correlate(real_data[:, 1], generated_data[:, 1], mode='valid')[0]
+print(f"Cross-correlation (Wind_Speed): {cross_corr_wind_speed}")
+print(f"Cross-correlation (Angle): {cross_corr_angle}")
+
+# Select a random subset of real_data for comparison
+comparison_indices = np.random.choice(len(real_data), size=len(generated_data), replace=False)
+comparison_data = real_data[comparison_indices]
+
+# Mean Absolute Error (MAE) and Root Mean Squared Error (RMSE)
+print("\nMAE and RMSE:")
+
+mae_wind_speed = mean_absolute_error(comparison_data[:, 0], generated_data[:, 0])
+mae_angle = mean_absolute_error(comparison_data[:, 1], generated_data[:, 1])
+print(f"Mean Absolute Error (Wind_Speed): {mae_wind_speed}")
+print(f"Mean Absolute Error (Angle): {mae_angle}")
+
+rmse_wind_speed = np.sqrt(mean_squared_error(comparison_data[:, 0], generated_data[:, 0]))
+rmse_angle = np.sqrt(mean_squared_error(comparison_data[:, 1], generated_data[:, 1]))
+print(f"Root Mean Squared Error (Wind_Speed): {rmse_wind_speed}")
+print(f"Root Mean Squared Error (Angle): {rmse_angle}")
+
+# Define datetime for saving the updated DataFrame
+from datetime import datetime
 # Save the updated DataFrame to a CSV file with current timestamp
 merged_df.to_csv(f'Updated_CHHATRAPATI_SHIVAJI_INTERNATIONAL_IN_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv', index=False)
-# merged_df.to_csv('Updated_CHHATRAPATI_SHIVAJI_INTERNATIONAL_IN_1.csv', index=False)
