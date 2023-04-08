@@ -27,7 +27,7 @@ df['Seconds'] = df['DATE'].dt.second
 
 df = df[['Year', 'Month', 'Day', 'Hour', 'Minutes', 'Seconds','REPORT_TYPE', 'Wind_Speed', 'Angle']]
 df = df[(df['Minutes'] == 0) & (df['Seconds'] == 0)]
-df.to_csv('Modified_CHHATRAPATI SHIVAJI INTERNATIONAL, IN.csv', index=False)
+# df.to_csv('Modified_CHHATRAPATI SHIVAJI INTERNATIONAL, IN.csv', index=False)
 # Create a DataFrame with hourly timestamps from 2012 to 2022
 date_range = pd.date_range(start='2018-01-01', end='2022-12-31', freq='H')
 df1 = pd.DataFrame(date_range, columns=['Date'])
@@ -42,7 +42,7 @@ angle_missing_pct = merged_df['Angle'].isna().mean() * 100
 print(f"Percentage of missing values in Wind_Speed column: {wind_speed_missing_pct:.2f}%")
 print(f"Percentage of missing values in Angle column: {angle_missing_pct:.2f}%")
 
-merged_df.to_csv('Merged_Modified_CHHATRAPATI SHIVAJI INTERNATIONAL, IN.csv', index=False)
+# merged_df.to_csv('Merged_Modified_CHHATRAPATI SHIVAJI INTERNATIONAL, IN.csv', index=False)
 
 from tensorflow.keras import layers
 import numpy as np
@@ -121,7 +121,6 @@ discriminator_model = make_discriminator_model()
 
 available_data = merged_df[['Wind_Speed', 'Angle']].values
 missing_indices = np.isnan(available_data).any(axis=1)
-
 scaler.fit(available_data[~missing_indices])
 available_data = scaler.transform(available_data)
 
