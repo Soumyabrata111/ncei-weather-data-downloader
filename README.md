@@ -7,6 +7,8 @@ This repository has a new branch called indian-stations, which focuses only on d
 ## Merging Indian Stations CSV Files
 This repository now contains a new Python script called `csv_file_merger_v1.py`, which can be used to merge CSV files downloaded using the `NCEI_NOAA_Indian_Stations_csv_downloader.py` script. This script merges CSV files for each station and stores them in separate CSV files with the name of the station as the filename. To use this script, simply run it using Python: 'python csv_file_merger_v1.py'
 
+## Adding CHHATRAPATI_SHIVAJI_INTERNATIONAL_IN.py file
+The Python script `CHHATRAPATI_SHIVAJI_INTERNATIONAL_IN.py` fills up the missing data of Wind Speed and Angle, using GAN. The data considered in the study is from 2018 to 2022.
 
 ## Dependencies
 This script requires the dependencies, which are listed in the __requirements.txt__ 
