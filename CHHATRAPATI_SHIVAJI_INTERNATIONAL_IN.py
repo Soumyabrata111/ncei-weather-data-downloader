@@ -48,23 +48,42 @@ from tensorflow.keras import layers
 import numpy as np
 
 # Define the GAN architecture
+# def make_generator_model():
+#     model = tf.keras.Sequential()
+#     model.add(layers.Dense(64, input_dim=100, kernel_initializer='he_normal'))
+#     model.add(layers.LeakyReLU(alpha=0.2))
+#     model.add(layers.Dense(64, kernel_initializer='he_normal'))
+#     model.add(layers.LeakyReLU(alpha=0.2))
+#     model.add(layers.Dense(2, activation='linear'))
+#     return model
+
+# def make_discriminator_model():
+#     model = tf.keras.Sequential()
+#     model.add(layers.Dense(64, input_dim=2, kernel_initializer='he_normal'))
+#     model.add(layers.LeakyReLU(alpha=0.2))
+#     model.add(layers.Dense(64, kernel_initializer='he_normal'))
+#     model.add(layers.LeakyReLU(alpha=0.2))
+#     model.add(layers.Dense(1, activation='sigmoid'))
+#     return model
+
 def make_generator_model():
     model = tf.keras.Sequential()
-    model.add(layers.Dense(64, input_dim=100, kernel_initializer='he_normal'))
-    model.add(layers.LeakyReLU(alpha=0.2))
-    model.add(layers.Dense(64, kernel_initializer='he_normal'))
-    model.add(layers.LeakyReLU(alpha=0.2))
+    model.add(layers.Dense(128, input_dim=100, kernel_initializer='he_normal'))
+    model.add(layers.PReLU(alpha_initializer='zeros', alpha_regularizer=None, alpha_constraint=None, shared_axes=None))
+    model.add(layers.Dense(128, kernel_initializer='he_normal'))
+    model.add(layers.PReLU(alpha_initializer='zeros', alpha_regularizer=None, alpha_constraint=None, shared_axes=None))
     model.add(layers.Dense(2, activation='linear'))
     return model
 
 def make_discriminator_model():
     model = tf.keras.Sequential()
-    model.add(layers.Dense(64, input_dim=2, kernel_initializer='he_normal'))
-    model.add(layers.LeakyReLU(alpha=0.2))
-    model.add(layers.Dense(64, kernel_initializer='he_normal'))
-    model.add(layers.LeakyReLU(alpha=0.2))
+    model.add(layers.Dense(128, input_dim=2, kernel_initializer='he_normal'))
+    model.add(layers.PReLU(alpha_initializer='zeros', alpha_regularizer=None, alpha_constraint=None, shared_axes=None))
+    model.add(layers.Dense(128, kernel_initializer='he_normal'))
+    model.add(layers.PReLU(alpha_initializer='zeros', alpha_regularizer=None, alpha_constraint=None, shared_axes=None))
     model.add(layers.Dense(1, activation='sigmoid'))
     return model
+
 
 # Define the loss functions
 cross_entropy = tf.keras.losses.BinaryCrossentropy(from_logits=True)
