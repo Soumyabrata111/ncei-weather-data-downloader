@@ -7,6 +7,9 @@ This repository now contains a new Python script called `csv_file_merger_v1.py`,
 ## Producing CSV file for hourly wind speed
 Now using the Python script called `hourly_wind_data.py`, hourly wind speed data for all the downloaded stations may be filtered out from the downloaded CSV files.
 
+## Generating optimized missing values.
+The script `GAN_GA_CHHATRAPATI_SHIVAJI_INTERNATIONAL_IN.ipynb`, first generates the missing data using GAN and then optimize that using Genetic Algorithm.
+
 ## Dependencies
 This script requires the dependencies, which are listed in the __requirements.txt__ 
 
